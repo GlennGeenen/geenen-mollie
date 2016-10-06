@@ -10,14 +10,6 @@ const lab = exports.lab = Lab.script();
 
 lab.experiment('Reseller API', () => {
 
-  // Mock Response
-  const SuccessResponse = `<?xml version="1.0"?>
-    <response version="v1">
-      <success>true</success>
-      <resultcode>10</resultcode>
-      <resultmessage>It works!</resultmessage>
-    </response>`;
-
   lab.before((done) => {
 
     Mollie.configure({
@@ -32,7 +24,15 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/account-claim')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Succesfully claimed the account.</resultmessage>
+          <partner_id>1337</partner_id>
+          <username>chucknorris</username>
+        </response>
+      `);
 
     Mollie.accountClaim({
       username: 'TestUser',
@@ -40,10 +40,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Succesfully claimed the account.');
+      Assert(payload.response.partner_id === '1337');
+      Assert(payload.response.username === 'chucknorris');
       done();
     });
   });
@@ -52,7 +53,16 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/account-create')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
+        <response version="v1">
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Account created successfully.</resultmessage>
+          <username>jandevries</username>
+          <password>Vfj@$&amp;MC</password>
+          <partner_id>127035</partner_id>
+        </response>
+      `);
 
     Mollie.accountCreate({
       testmode: 1,
@@ -70,7 +80,10 @@ lab.experiment('Reseller API', () => {
       Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Account created successfully.');
+      Assert(payload.response.username === 'jandevries');
+      Assert(payload.response.password === 'Vfj@$&MC');
+      Assert(payload.response.partner_id === '127035');
       done();
     });
   });
@@ -79,7 +92,15 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/account-edit')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
+        <response>
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Account edited successfully.</resultmessage>
+          <username>Jan Janssen</username>
+          <partner_id>123456</partner_id>
+        </response>
+      `);
 
     Mollie.accountEdit({
       username: 'TestUser',
@@ -93,10 +114,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Account edited successfully.');
+      Assert(payload.response.username === 'Jan Janssen');
+      Assert(payload.response.partner_id === '123456');
       done();
     });
   });
@@ -105,7 +127,15 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/account-valid')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Customer janjansen exists and password is correct.</resultmessage>
+          <exists>true</exists>
+          <partner_id>1337</partner_id>
+        </response>
+      `);
 
     Mollie.accountValid({
       username: 'TestUser',
@@ -113,10 +143,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Customer janjansen exists and password is correct.');
+      Assert(payload.response.exists === 'true');
+      Assert(payload.response.partner_id === '1337');
       done();
     });
   });
@@ -125,7 +156,21 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/available-payment-methods')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Customer has the following payment services available.</resultmessage>
+          <services>
+            <ivr>true</ivr>
+            <psms>true</psms>
+            <ideal>false</ideal>
+            <paysafecard>true</paysafecard>
+            <creditcard>false</creditcard>
+            <mistercash>false</mistercash>
+          </services>
+        </response>
+      `);
 
     Mollie.availablePaymentMethods({
       username: 'TestUser',
@@ -134,10 +179,15 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Customer has the following payment services available.');
+      Assert(payload.response.services.ivr === 'true');
+      Assert(payload.response.services.psms === 'true');
+      Assert(payload.response.services.ideal === 'false');
+      Assert(payload.response.services.paysafecard === 'true');
+      Assert(payload.response.services.creditcard === 'false');
+      Assert(payload.response.services.mistercash === 'false');
       done();
     });
   });
@@ -146,7 +196,23 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/bankaccount-edit')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
+        <response>
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Bankaccount successfully updated.</resultmessage>
+          <bankaccount>
+            <id>9d7512a3d2c16b5f9dd49b7aae2d7eaf</id>
+            <account_name>JAN JANSEN</account_name>
+            <account_iban>NL40RABO0123456789</account_iban>
+            <bank_bic>RABONL2U</bank_bic>
+            <bank>RABOBANK</bank>
+            <location>AMSTERDAM</location>
+            <selected>true</selected>
+            <verified>false</verified>
+          </bankaccount>
+        </response>
+      `);
 
     Mollie.bankaccountEdit({
       username: 'TestUser',
@@ -156,10 +222,18 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Bankaccount successfully updated.');
+
+      Assert(payload.response.bankaccount.id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
+      Assert(payload.response.bankaccount.account_name === 'JAN JANSEN');
+      Assert(payload.response.bankaccount.account_iban === 'NL40RABO0123456789');
+      Assert(payload.response.bankaccount.bank_bic === 'RABONL2U');
+      Assert(payload.response.bankaccount.bank === 'RABOBANK');
+      Assert(payload.response.bankaccount.location === 'AMSTERDAM');
+      Assert(payload.response.bankaccount.selected === 'true');
+      Assert(payload.response.bankaccount.verified === 'false');
       done();
     });
   });
@@ -168,7 +242,22 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/bankaccounts')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <items>
+            <bankaccount>
+              <id>9d7512a3d2c16b5f9dd49b7aae2d7eaf</id>
+              <account_name>JAN JANSEN</account_name>
+              <account_iban>NL40RABO0123456789</account_iban>
+              <bic_code>RABONL2U</bic_code>
+              <bank>RABOBANK</bank>
+              <location>AMSTERDAM</location>
+              <selected>true</selected>
+              <verified>false</verified>
+            </bankaccount>
+          </items>
+        </response>
+      `);
 
     Mollie.bankaccounts({
       username: 'TestUser',
@@ -177,10 +266,8 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      const items = payload.response.items;
+      Assert(items.bankaccount.id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
       done();
     });
   });
@@ -189,7 +276,13 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/disconnect-account')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
+        <response>
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Account disconnected successfully.</resultmessage>
+        </response>
+      `);
 
     Mollie.disconnectAccount({
       username: 'TestUser',
@@ -198,10 +291,9 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Account disconnected successfully.');
       done();
     });
   });
@@ -210,7 +302,14 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/get-login-link')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
+        <response version="v1">
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Redirect the customer to the following url.</resultmessage>
+          <redirect_url>https://www.mollie.com/login/oneTimeLogin/4299193/008788d1a618c3aff51acd57ca82661c?redirect_url=%2Fbeheer%2Fbetaalmethodes%2F</redirect_url>
+        </response>
+      `);
 
     Mollie.getLoginLink({
       username: 'TestUser',
@@ -222,7 +321,8 @@ lab.experiment('Reseller API', () => {
       Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Redirect the customer to the following url.');
+      Assert(payload.response.redirect_url === 'https://www.mollie.com/login/oneTimeLogin/4299193/008788d1a618c3aff51acd57ca82661c?redirect_url=%2Fbeheer%2Fbetaalmethodes%2F');
       done();
     });
   });
@@ -231,7 +331,27 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/profile-create')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0" encoding="UTF-8"?>
+        <response version="v1">
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Profile created successfully</resultmessage>
+          <profile>
+            <name>Snoep.nl</name>
+            <hash>9C696E36</hash>
+            <website>http://snoep.nl/</website>
+            <sector>6</sector>
+            <category>5399</category>
+            <verified>false</verified>
+            <phone>0201234567</phone>
+            <email>info@snoep.nl</email>
+            <api_keys>
+              <test>test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9</test>
+              <live>live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw</live>
+            </api_keys>
+          </profile>
+        </response>
+      `);
 
     Mollie.profileCreate({
       username: 'TestUser',
@@ -248,7 +368,18 @@ lab.experiment('Reseller API', () => {
       Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Profile created successfully');
+      const profile = payload.response.profile;
+      Assert(profile.name === 'Snoep.nl');
+      Assert(profile.hash === '9C696E36');
+      Assert(profile.website === 'http://snoep.nl/');
+      Assert(profile.sector === '6');
+      Assert(profile.category === '5399');
+      Assert(profile.verified === 'false');
+      Assert(profile.phone === '0201234567');
+      Assert(profile.email === 'info@snoep.nl');
+      Assert(profile.api_keys.test === 'test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9');
+      Assert(profile.api_keys.live === 'live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw');
       done();
     });
   });
@@ -257,7 +388,26 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/profiles')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <items>
+            <profile>
+              <name>Snoep.nl</name>
+              <hash>9C696E36</hash>
+              <website>http://snoep.nl/</website>
+              <sector>6</sector>
+              <category>5399</category>
+              <verified>true</verified>
+              <phone>0201234567</phone>
+              <email>info@snoep.nl</email>
+              <api_keys>
+                <test>test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9</test>
+                <live>live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw</live>
+              </api_keys>
+            </profile>
+          </items>
+        </response>`
+      );
 
     Mollie.profiles({
       username: 'TestUser',
@@ -266,10 +416,17 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      const profile = payload.response.items.profile;
+      Assert(profile.name === 'Snoep.nl');
+      Assert(profile.hash === '9C696E36');
+      Assert(profile.website === 'http://snoep.nl/');
+      Assert(profile.sector === '6');
+      Assert(profile.category === '5399');
+      Assert(profile.verified === 'true');
+      Assert(profile.phone === '0201234567');
+      Assert(profile.email === 'info@snoep.nl');
+      Assert(profile.api_keys.test === 'test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9');
+      Assert(profile.api_keys.live === 'live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw');
       done();
     });
   });
@@ -278,7 +435,13 @@ lab.experiment('Reseller API', () => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/set-fees')
-      .reply(200, SuccessResponse);
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <success>true</success>
+          <resultcode>10</resultcode>
+          <resultmessage>Fee for payment method iDEAL set to &#x20AC; 0,22 per transaction.</resultmessage>
+        </response>
+      `);
 
     Mollie.setFees({
       username: 'TestUser',
@@ -291,10 +454,9 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
       Assert(payload.response.success === 'true');
       Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'It works!');
+      Assert(payload.response.resultmessage === 'Fee for payment method iDEAL set to € 0,22 per transaction.');
       done();
     });
   });
@@ -347,5 +509,4 @@ lab.experiment('Reseller API', () => {
       done();
     });
   });
-
 });
