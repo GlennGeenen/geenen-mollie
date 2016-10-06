@@ -1,11 +1,21 @@
 {
     "name": "geenen-mollie",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "Mollie reseller API implementation",
     "main": "index.js",
     "repository": {
         "type": "git",
         "url": "git@github.com:GlennGeenen/geenen-mollie.git"
+    },
+    "keywords": [
+      "mollie",
+      "payment",
+      "reseller"
+    ],
+    "author": "Glenn Geenen",
+    "license": "MIT",
+    "engines": {
+        "node": ">=4.0.0"
     },
     "scripts": {
         "lint": "eslint **/*.js",
@@ -13,16 +23,6 @@
         "coverage": "lab -c -r html -o ./coverage/index.html -L",
         "postcoverage": "opn ./coverage/index.html"
     },
-    "keywords": [
-      "mollie",
-      "payment",
-      "reseller"
-    ],
-    "engines": {
-        "node": ">=4.0.0"
-    },
-    "author": "Glenn Geenen",
-    "license": "MIT",
     "devDependencies": {
         "assert": "1.x.x",
         "eslint": "3.x.x",

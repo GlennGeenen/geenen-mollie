@@ -1,5 +1,7 @@
 # geenen-mollie
 
+[![Build Status](https://travis-ci.org/GlennGeenen/geenen-mollie.svg?branch=master)](https://travis-ci.org/GlennGeenen/geenen-mollie)
+
 Unofficial implementation of the mollie-reseller API for node. This package is created
 because some other implementations are outdated or bloated.
 
