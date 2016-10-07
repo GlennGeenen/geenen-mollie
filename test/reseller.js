@@ -238,6 +238,30 @@ lab.experiment('Reseller API success', () => {
     });
   });
 
+  lab.test('should succeed to get no bankaccounts', (done) => {
+
+    Nock('https://mollie.com')
+      .post('/api/reseller/v1/bankaccounts')
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <items>
+          </items>
+        </response>
+      `);
+
+    Mollie.bankaccounts({
+      username: 'TestUser',
+      password: 'TestPassword',
+      partner_id_customer: Crypto.randomBytes(4).toString('hex')
+    }, (err, payload) => {
+
+      Assert(err === null);
+      Assert(Array.isArray(payload));
+      Assert(payload.length === 0);
+      done();
+    });
+  });
+
   lab.test('should succeed to get single bankaccount', (done) => {
 
     Nock('https://mollie.com')
@@ -266,8 +290,8 @@ lab.experiment('Reseller API success', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      const bankaccount = payload[0];
-      Assert(bankaccount.id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
+      Assert(Array.isArray(payload));
+      Assert(payload[0].id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
       done();
     });
   });
@@ -310,6 +334,7 @@ lab.experiment('Reseller API success', () => {
     }, (err, payload) => {
 
       Assert(err === null);
+      Assert(Array.isArray(payload));
       Assert(payload[0].id === '9d7512a3d2c16b5f9dd49b7aae2d7eae');
       Assert(payload[1].id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
       done();
@@ -424,6 +449,30 @@ lab.experiment('Reseller API success', () => {
       Assert(profile.email === 'info@snoep.nl');
       Assert(profile.api_keys.test === 'test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9');
       Assert(profile.api_keys.live === 'live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw');
+      done();
+    });
+  });
+
+  lab.test('should succeed to get no profiles', (done) => {
+
+    Nock('https://mollie.com')
+      .post('/api/reseller/v1/profiles')
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <items>
+          </items>
+        </response>
+      `);
+
+    Mollie.profiles({
+      username: 'TestUser',
+      password: 'TestPassword',
+      partner_id_customer: Crypto.randomBytes(4).toString('hex')
+    }, (err, payload) => {
+
+      Assert(err === null);
+      Assert(Array.isArray(payload));
+      Assert(payload.length === 0);
       done();
     });
   });

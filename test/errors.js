@@ -170,7 +170,7 @@ lab.experiment('Reseller API errors', () => {
     });
   });
 
-  lab.test('should succeed to get single bankaccount', (done) => {
+  lab.test('should handle bankaccounts error', (done) => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/bankaccounts')

@@ -57,6 +57,10 @@ const bankaccounts = function (params, done) {
       return done(err);
     }
 
+    if (!response.items || !response.items.bankaccount) {
+      return done(null, []);
+    }
+
     if (Array.isArray(response.items.bankaccount)) {
       return done(null, response.items.bankaccount);
     }
@@ -86,6 +90,10 @@ const profiles = function (params, done) {
 
     if (err) {
       return done(err);
+    }
+
+    if (!response.items || !response.items.profile) {
+      return done(null, []);
     }
 
     if (Array.isArray(response.items.profile)) {
