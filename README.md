@@ -5,16 +5,14 @@
 Unofficial implementation of the mollie-reseller API for node. This package is created
 because some other implementations are outdated or bloated.
 
-All available methods are supported, you should, however, always check the results for
-any validation errors reported by Mollie, as this module does not check for required
-parameters.
+All available methods are supported. An error object is returned if the request did not succeed.
 
 https://www.mollie.com/nl/support/post/documentatie-reseller-api
 
 ## About
 
 Mollie is a Payment Service Provider from the Netherlands. They allow you to create
-new customers trough their re-seller API as part of your platform integration.
+new customers through their reseller API as part of your platform integration.
 
 The following API methods are supported:
 
@@ -24,12 +22,16 @@ The following API methods are supported:
 * account-valid
 * available-payment-methods
 * bankaccount-edit
-* bankaccounts
+* bankaccounts ( returns array of bankaccounts )
 * disconnect-account
 * get-login-link
 * profile-create
-* profiles
+* profiles ( returns array of profiles )
 * set-fees
+
+## Installation problems
+
+If you get installation errors you should check [node-expat](https://github.com/astro/node-expat) requirements.
 
 ## Example
 
@@ -58,5 +60,13 @@ retrieve the correct credentials. Check the tests for more examples.
         country: 'BE'
     }, function(err, result) {
         console.log(result);
+
+        // {
+        //     success: 'true',
+        //     resultmessage: 'Account created successfully.',
+        //     username: 'glenngeenen',
+        //     password: 'Vfj@$&MC',
+        //     partner_id: '123456'
+        // }
     });
 ````

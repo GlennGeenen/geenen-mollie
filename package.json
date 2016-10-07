@@ -1,6 +1,6 @@
 {
     "name": "geenen-mollie",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Mollie reseller API implementation",
     "main": "index.js",
     "repository": {
@@ -33,6 +33,7 @@
         "nock": "8.x.x"
     },
     "dependencies": {
-        "xml2json": "0.x.x"
+        "xml2json": "0.x.x",
+        "boom": "4.x.x"
     }
 }

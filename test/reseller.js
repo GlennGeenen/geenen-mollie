@@ -8,7 +8,7 @@ const Nock = require('nock');
 const Lab = require('lab');
 const lab = exports.lab = Lab.script();
 
-lab.experiment('Reseller API', () => {
+lab.experiment('Reseller API success', () => {
 
   lab.before((done) => {
 
@@ -40,11 +40,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Succesfully claimed the account.');
-      Assert(payload.response.partner_id === '1337');
-      Assert(payload.response.username === 'chucknorris');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Succesfully claimed the account.');
+      Assert(payload.partner_id === '1337');
+      Assert(payload.username === 'chucknorris');
       done();
     });
   });
@@ -77,13 +77,13 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Account created successfully.');
-      Assert(payload.response.username === 'jandevries');
-      Assert(payload.response.password === 'Vfj@$&MC');
-      Assert(payload.response.partner_id === '127035');
+      Assert(payload.version === 'v1');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Account created successfully.');
+      Assert(payload.username === 'jandevries');
+      Assert(payload.password === 'Vfj@$&MC');
+      Assert(payload.partner_id === '127035');
       done();
     });
   });
@@ -114,11 +114,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Account edited successfully.');
-      Assert(payload.response.username === 'Jan Janssen');
-      Assert(payload.response.partner_id === '123456');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Account edited successfully.');
+      Assert(payload.username === 'Jan Janssen');
+      Assert(payload.partner_id === '123456');
       done();
     });
   });
@@ -143,11 +143,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Customer janjansen exists and password is correct.');
-      Assert(payload.response.exists === 'true');
-      Assert(payload.response.partner_id === '1337');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Customer janjansen exists and password is correct.');
+      Assert(payload.exists === 'true');
+      Assert(payload.partner_id === '1337');
       done();
     });
   });
@@ -179,15 +179,15 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Customer has the following payment services available.');
-      Assert(payload.response.services.ivr === 'true');
-      Assert(payload.response.services.psms === 'true');
-      Assert(payload.response.services.ideal === 'false');
-      Assert(payload.response.services.paysafecard === 'true');
-      Assert(payload.response.services.creditcard === 'false');
-      Assert(payload.response.services.mistercash === 'false');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Customer has the following payment services available.');
+      Assert(payload.services.ivr === 'true');
+      Assert(payload.services.psms === 'true');
+      Assert(payload.services.ideal === 'false');
+      Assert(payload.services.paysafecard === 'true');
+      Assert(payload.services.creditcard === 'false');
+      Assert(payload.services.mistercash === 'false');
       done();
     });
   });
@@ -222,23 +222,23 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Bankaccount successfully updated.');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Bankaccount successfully updated.');
 
-      Assert(payload.response.bankaccount.id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
-      Assert(payload.response.bankaccount.account_name === 'JAN JANSEN');
-      Assert(payload.response.bankaccount.account_iban === 'NL40RABO0123456789');
-      Assert(payload.response.bankaccount.bank_bic === 'RABONL2U');
-      Assert(payload.response.bankaccount.bank === 'RABOBANK');
-      Assert(payload.response.bankaccount.location === 'AMSTERDAM');
-      Assert(payload.response.bankaccount.selected === 'true');
-      Assert(payload.response.bankaccount.verified === 'false');
+      Assert(payload.bankaccount.id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
+      Assert(payload.bankaccount.account_name === 'JAN JANSEN');
+      Assert(payload.bankaccount.account_iban === 'NL40RABO0123456789');
+      Assert(payload.bankaccount.bank_bic === 'RABONL2U');
+      Assert(payload.bankaccount.bank === 'RABOBANK');
+      Assert(payload.bankaccount.location === 'AMSTERDAM');
+      Assert(payload.bankaccount.selected === 'true');
+      Assert(payload.bankaccount.verified === 'false');
       done();
     });
   });
 
-  lab.test('should succeed to get bankaccounts', (done) => {
+  lab.test('should succeed to get single bankaccount', (done) => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/bankaccounts')
@@ -266,8 +266,52 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      const items = payload.response.items;
-      Assert(items.bankaccount.id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
+      const bankaccount = payload[0];
+      Assert(bankaccount.id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
+      done();
+    });
+  });
+
+  lab.test('should succeed to get multiple bankaccounts', (done) => {
+
+    Nock('https://mollie.com')
+      .post('/api/reseller/v1/bankaccounts')
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <items>
+            <bankaccount>
+              <id>9d7512a3d2c16b5f9dd49b7aae2d7eae</id>
+              <account_name>JAN JANSEN</account_name>
+              <account_iban>NL40RABO0123456789</account_iban>
+              <bic_code>RABONL2U</bic_code>
+              <bank>RABOBANK</bank>
+              <location>AMSTERDAM</location>
+              <selected>true</selected>
+              <verified>false</verified>
+            </bankaccount>
+            <bankaccount>
+              <id>9d7512a3d2c16b5f9dd49b7aae2d7eaf</id>
+              <account_name>JAN JANSEN</account_name>
+              <account_iban>NL40RABO0123456789</account_iban>
+              <bic_code>RABONL2U</bic_code>
+              <bank>RABOBANK</bank>
+              <location>AMSTERDAM</location>
+              <selected>true</selected>
+              <verified>false</verified>
+            </bankaccount>
+          </items>
+        </response>
+      `);
+
+    Mollie.bankaccounts({
+      username: 'TestUser',
+      password: 'TestPassword',
+      partner_id_customer: Crypto.randomBytes(4).toString('hex')
+    }, (err, payload) => {
+
+      Assert(err === null);
+      Assert(payload[0].id === '9d7512a3d2c16b5f9dd49b7aae2d7eae');
+      Assert(payload[1].id === '9d7512a3d2c16b5f9dd49b7aae2d7eaf');
       done();
     });
   });
@@ -291,9 +335,9 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Account disconnected successfully.');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Account disconnected successfully.');
       done();
     });
   });
@@ -318,11 +362,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Redirect the customer to the following url.');
-      Assert(payload.response.redirect_url === 'https://www.mollie.com/login/oneTimeLogin/4299193/008788d1a618c3aff51acd57ca82661c?redirect_url=%2Fbeheer%2Fbetaalmethodes%2F');
+      Assert(payload.version === 'v1');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Redirect the customer to the following url.');
+      Assert(payload.redirect_url === 'https://www.mollie.com/login/oneTimeLogin/4299193/008788d1a618c3aff51acd57ca82661c?redirect_url=%2Fbeheer%2Fbetaalmethodes%2F');
       done();
     });
   });
@@ -365,11 +409,11 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.version === 'v1');
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Profile created successfully');
-      const profile = payload.response.profile;
+      Assert(payload.version === 'v1');
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Profile created successfully');
+      const profile = payload.profile;
       Assert(profile.name === 'Snoep.nl');
       Assert(profile.hash === '9C696E36');
       Assert(profile.website === 'http://snoep.nl/');
@@ -384,7 +428,7 @@ lab.experiment('Reseller API', () => {
     });
   });
 
-  lab.test('should succeed to get profile', (done) => {
+  lab.test('should succeed to get single profile', (done) => {
 
     Nock('https://mollie.com')
       .post('/api/reseller/v1/profiles')
@@ -416,7 +460,7 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      const profile = payload.response.items.profile;
+      const profile = payload[0];
       Assert(profile.name === 'Snoep.nl');
       Assert(profile.hash === '9C696E36');
       Assert(profile.website === 'http://snoep.nl/');
@@ -427,6 +471,69 @@ lab.experiment('Reseller API', () => {
       Assert(profile.email === 'info@snoep.nl');
       Assert(profile.api_keys.test === 'test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9');
       Assert(profile.api_keys.live === 'live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw');
+      done();
+    });
+  });
+
+  lab.test('should succeed to get multiple profiles', (done) => {
+
+    Nock('https://mollie.com')
+      .post('/api/reseller/v1/profiles')
+      .reply(200, `<?xml version="1.0"?>
+        <response>
+          <items>
+            <profile>
+              <name>Snoep.nl</name>
+              <hash>9C696E36</hash>
+              <website>http://snoep.nl/</website>
+              <sector>6</sector>
+              <category>5399</category>
+              <verified>true</verified>
+              <phone>0201234567</phone>
+              <email>info@snoep.nl</email>
+              <api_keys>
+                <test>test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9</test>
+                <live>live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw</live>
+              </api_keys>
+            </profile>
+            <profile>
+              <name>Snoep.nl</name>
+              <hash>9C696E36</hash>
+              <website>http://snoep.nl/</website>
+              <sector>6</sector>
+              <category>5399</category>
+              <verified>true</verified>
+              <phone>0201234567</phone>
+              <email>info@snoep.nl</email>
+              <api_keys>
+                <test>test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9</test>
+                <live>live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw</live>
+              </api_keys>
+            </profile>
+          </items>
+        </response>`
+      );
+
+    Mollie.profiles({
+      username: 'TestUser',
+      password: 'TestPassword',
+      partner_id_customer: Crypto.randomBytes(4).toString('hex')
+    }, (err, payload) => {
+
+      Assert(err === null);
+      payload.forEach((profile) => {
+
+        Assert(profile.name === 'Snoep.nl');
+        Assert(profile.hash === '9C696E36');
+        Assert(profile.website === 'http://snoep.nl/');
+        Assert(profile.sector === '6');
+        Assert(profile.category === '5399');
+        Assert(profile.verified === 'true');
+        Assert(profile.phone === '0201234567');
+        Assert(profile.email === 'info@snoep.nl');
+        Assert(profile.api_keys.test === 'test_ImXWtEB4alZ149cxDrLxr1XDt8kbI9');
+        Assert(profile.api_keys.live === 'live_DjymcBSCZX4MijQ2RKHGTmAvB4J4xw');
+      });
       done();
     });
   });
@@ -454,58 +561,9 @@ lab.experiment('Reseller API', () => {
     }, (err, payload) => {
 
       Assert(err === null);
-      Assert(payload.response.success === 'true');
-      Assert(payload.response.resultcode === '10');
-      Assert(payload.response.resultmessage === 'Fee for payment method iDEAL set to € 0,22 per transaction.');
-      done();
-    });
-  });
-
-  lab.test('should handle request error', (done) => {
-
-    Nock('https://mollie.com')
-      .post('/api/reseller/v1/set-fees')
-      .replyWithError('something awful happened');
-
-    Mollie.setFees({
-      username: 'TestUser',
-      password: 'TestPassword',
-      partner_id_customer: Crypto.randomBytes(4).toString('hex'),
-      payment_method: 'ideal',
-      payment_subtype: 'ideal',
-      fee_type: 'fixed',
-      fee: 0.5
-    }, (err, payload) => {
-
-      Assert(err !== null);
-      Assert(payload === undefined);
-      done();
-    });
-  });
-
-  lab.test('should get error on invalid xml', (done) => {
-
-    Nock('https://mollie.com')
-      .post('/api/reseller/v1/set-fees')
-      .reply(200, `<?xml version="1.0"?>
-        <response version="v1">
-          <success>true
-          <resultcode>10</resultcode>
-          <resultmessage>It works!</resultmessage>
-        </response>`);
-
-    Mollie.setFees({
-      username: 'TestUser',
-      password: 'TestPassword',
-      partner_id_customer: Crypto.randomBytes(4).toString('hex'),
-      payment_method: 'ideal',
-      payment_subtype: 'ideal',
-      fee_type: 'fixed',
-      fee: 0.5
-    }, (err, payload) => {
-
-      Assert(err !== null);
-      Assert(payload === undefined);
+      Assert(payload.success === 'true');
+      Assert(payload.resultcode === '10');
+      Assert(payload.resultmessage === 'Fee for payment method iDEAL set to € 0,22 per transaction.');
       done();
     });
   });
