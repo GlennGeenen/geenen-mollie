@@ -1,6 +1,6 @@
 {
     "name": "geenen-mollie",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "Mollie reseller API implementation",
     "main": "index.js",
     "repository": {
