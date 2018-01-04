@@ -8,9 +8,9 @@
         "url": "git@github.com:GlennGeenen/geenen-mollie.git"
     },
     "keywords": [
-      "mollie",
-      "payment",
-      "reseller"
+        "mollie",
+        "payment",
+        "reseller"
     ],
     "author": "Glenn Geenen",
     "license": "MIT",
